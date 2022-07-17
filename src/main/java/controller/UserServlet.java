@@ -37,6 +37,8 @@ public class UserServlet extends HttpServlet {
                 case "delete":
                     deleteUser(request, response);
                     break;
+                case "logout":
+                    logOut(request, response);
                 default:
                     showListUser(request, response);
             }
@@ -45,9 +47,14 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    private void logOut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+        requestDispatcher.forward(request, response);
+    }
+
     private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int id = Integer.parseInt(request.getParameter("id"));
-        User u = userService.selectById(id);
+        User u = userService.selectById(id, 1);
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("user/edit.jsp");
         request.setAttribute("user", u);
         requestDispatcher.forward(request, response);
@@ -82,6 +89,9 @@ public class UserServlet extends HttpServlet {
                 case "login":
                     loginAcount(request, response);
                     break;
+                case "signIn":
+                    signIn(request, response);
+                    break;
                 case "create":
                     createUser(request, response);
                     break;
@@ -94,6 +104,23 @@ public class UserServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    private User getUser(HttpServletRequest request, HttpServletResponse response){
+        String first = request.getParameter("firstName");
+        String last = request.getParameter("lastName");
+        String address = request.getParameter("address");
+        String phone = request.getParameter("phoneNumber");
+        String username = request.getParameter("userName");
+        String email = request.getParameter("email");
+        String pass = request.getParameter("password");
+
+        return new User(first, last, address, phone, username, email, pass);
+    }
+
+    private void signIn(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+        User user = getUser(request, response);
+        userService.insert(user);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
     }
 
     private void editUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -113,27 +140,23 @@ public class UserServlet extends HttpServlet {
 
 
     private void createUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        String first = request.getParameter("firstName");
-        String last = request.getParameter("lastName");
-        String address = request.getParameter("address");
-        String phone = request.getParameter("phoneNumber");
-        String username = request.getParameter("userName");
-        String email = request.getParameter("email");
-        String pass = request.getParameter("password");
-
-        User user = new User(first, last, address, phone, username, email, pass);
+        User user = getUser(request, response);
         userService.insert(user);
         response.sendRedirect("/users");
     }
 
-    private void loginAcount(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void loginAcount(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if(userService.selectByNameAndPass(username, password)){
+        if(userService.selectByNameAndPass(username, password, 1) > 0){
+            User u = new User(username, password);
+            request.setAttribute("username", u);
             response.sendRedirect("/users");
         }
         else {
-            // chưa biết điều hướng
+
+            RequestDispatcher resRequestDispatcher = request.getRequestDispatcher("index.jsp");
+            resRequestDispatcher.forward(request, response);
         }
 
     }

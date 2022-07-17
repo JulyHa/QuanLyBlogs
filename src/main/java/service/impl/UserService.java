@@ -13,13 +13,19 @@ public class UserService implements IUserService {
     private final static String JDBC_USERNAME = "root";
     private final static String JDBC_PASSWORD = "123456";
 
-    private String sqlSelectById = "select * from customers where CustomerID = ?;";
-    private String sqlSelectByUser = "select * from customers where( username = ? or email = ? ) and password = ?;";
+    private String sqlSelectById = "select * from customers INNER JOIN account_role " +
+            "on customers.customerID = account_role.customerID " +
+            "where customers.CustomerID = ? and RoleId = ?;";
+    private String sqlSelectByUser = "select * from customers INNER JOIN account_role " +
+            "on customers.customerID = account_role.customerID " +
+            "where( username = ? or email = ? ) and password = ? and RoleId = ?; ";
     private String sqlSelectAll = "select * from customers;";
     private String sqlInsert = "INSERT INTO customers (`FirstName`, `LastName`, `Address`, `PhoneNumber`, `Username`, `Email`, `Password`, `Create_Time`, `Update_Time`, `isActive`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private String sqlInsertRole = "INSERT INTO account_role (CustomerID, RoleId) VALUES (?, 1);";
     private String sqlUpdate = "UPDATE customers SET FirstName = ?, LastName = ?, Address = ?, PhoneNumber = ?, Username = ?," +
                                 " Email = ?, Password = ?, Update_Time = ?, isActive = ? WHERE (CustomerID = ?);";
     private String sqlDelete = "delete from customers where CustomerID = ?;";
+    private String sqlDeleteRole = "delete from account_role where CustomerID = ?;";
 
     public UserService() {
     }
@@ -37,7 +43,8 @@ public class UserService implements IUserService {
 
     @Override
     public void insert(User user) throws SQLException {
-        try (Connection connection = getConnection(); PreparedStatement pre = connection.prepareStatement(sqlInsert)) {
+        try (Connection connection = getConnection();
+             PreparedStatement pre = connection.prepareStatement(sqlInsert)) {
             pre.setString(1, user.getFirstName());
             pre.setString(2, user.getLastName());
             pre.setString(3, user.getAddress());
@@ -52,14 +59,19 @@ public class UserService implements IUserService {
             System.out.println(pre);
             pre.executeUpdate();
         }
+        try(Connection con = getConnection(); PreparedStatement pre = con.prepareStatement(sqlSelectByUser)) {
+            pre.setInt(1, user.getId());
+            pre.executeUpdate();
+        }
     }
 
     @Override
-    public User selectById(int id) throws SQLException {
+    public User selectById(int id, int role) throws SQLException {
         User user = null;
         try(Connection con = getConnection();
         PreparedStatement pre = con.prepareStatement(sqlSelectById)){
             pre.setInt(1, id);
+            pre.setInt(2, role);
             ResultSet rs = pre.executeQuery();
 
 
@@ -84,13 +96,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean selectByNameAndPass(String name, String password) {
+    public int selectByNameAndPass(String name, String password, int role) {
         User u = null;
         try(Connection con = getConnection();
             PreparedStatement pre = con.prepareStatement(sqlSelectByUser)){
             pre.setString(1, name);
             pre.setString(2, name);
             pre.setString(3, password);
+            pre.setInt(4, role);
             ResultSet rs =pre.executeQuery();
 
             while (rs.next()){
@@ -99,12 +112,12 @@ public class UserService implements IUserService {
                 u = new User(username, pass);
             }
             if(u != null){
-                return true;
+                return role;
             }
         }catch (SQLException e){
-            return false;
+            return -1;
         }
-        return false;
+        return -1;
     }
 
     @Override
@@ -140,10 +153,16 @@ public class UserService implements IUserService {
     public boolean delete(int id) throws SQLException {
         boolean rowDelete = false;
         try(Connection connection = getConnection();
+                                       PreparedStatement preparedStatement = connection.prepareStatement(sqlDelete)) {
+            preparedStatement.setInt(1, id);
+            rowDelete = preparedStatement.executeUpdate() > 0;
+        }
+        try(Connection connection = getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sqlDelete)){
             preparedStatement.setInt(1, id);
             rowDelete = preparedStatement.executeUpdate() > 0;
         }
+
         return rowDelete;
     }
 

@@ -1,52 +1,3 @@
-<%--&lt;%&ndash;--%>
-<%--  Created by IntelliJ IDEA.--%>
-<%--  User: ADMIN--%>
-<%--  Date: 2022-07-11--%>
-<%--  Time: 10:44 SA--%>
-<%--  To change this template use File | Settings | File Templates.--%>
-<%--&ndash;%&gt;--%>
-<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
-<%--<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>--%>
-<%--<html>--%>
-<%--<head>--%>
-<%--    <title>Category</title>--%>
-<%--</head>--%>
-<%--<body>--%>
-
-<%--<center>--%>
-<%--    <h1>Category Management</h1>--%>
-<%--    <h2>--%>
-<%--        <a href="/categories?action=create">Add New Category</a>--%>
-<%--    </h2>--%>
-<%--</center>--%>
-<%--<div align="center">--%>
-<%--    <table border="1" cellpadding="5">--%>
-<%--        <caption><h2>List of Category</h2></caption>--%>
-<%--        <tr>--%>
-<%--            <th>ID</th>--%>
-<%--            <th>Name</th>--%>
-<%--            <th>Description</th>--%>
-<%--            <th>isActive</th>--%>
-<%--            <th>Actions</th>--%>
-<%--        </tr>--%>
-<%--        <c:forEach var="category" items="${categories}">--%>
-<%--            <tr>--%>
-<%--                <td><c:out value="${category.getId()}"/></td>--%>
-<%--                <td><c:out value="${category.getName()}"/></td>--%>
-<%--                <td><c:out value="${category.getDescription()}"/></td>--%>
-<%--                <td><c:out value="${category.isActive()}"/></td>--%>
-<%--                <td>--%>
-<%--                    <a href="/categories?action=edit&id=${category.getId()}">Edit</a>--%>
-<%--                    <a href="/categories?action=delete&id=${category.getId()}">Delete</a>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--        </c:forEach>--%>
-<%--    </table>--%>
-<%--</div>--%>
-
-
-<%--</body>--%>
-<%--</html>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -77,7 +28,7 @@
                 </div>
                 <div class="p-1 flex flex-row items-center">
                     <img onclick="profileToggle()" class="inline-block h-8 w-8 rounded-full" src="https://avatars0.githubusercontent.com/u/4323180?s=460&v=4" alt="">
-<%--                    <a href="#" class="text-white p-2 no-underline hidden md:block lg:block">Admin</a>--%>
+                    <%--                    <a href="#" class="text-white p-2 no-underline hidden md:block lg:block">Admin</a>--%>
                     <a href="<c:url value="/users?action=logout"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-white">
                         Logout
                     </a>
@@ -137,35 +88,41 @@
                     <div class="flex flex-1  flex-col md:flex-row lg:flex-row mx-2">
                         <div class="mb-2 border-solid border-gray-300 rounded border shadow-sm w-full">
                             <div class="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b">
-                                Category Table
-                                <a href="<c:url value="/categories?action=create"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-white">
+                                Blogs Table
+                                <a href="#" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-white">
                                     <i class="fas fa-edit"></i></a>
                             </div>
                             <div class="p-3">
                                 <table class="table-responsive w-full rounded">
                                     <thead>
                                     <tr>
-                                        <th class="border w-1/4 px-4 py-2">ID</th>
-                                        <th class="border w-1/6 px-4 py-2">Name</th>
-                                        <th class="border w-1/6 px-4 py-2">Description</th>
-                                        <th class="border w-1/5 px-4 py-2">isActive</th>
-                                        <th class="border w-1/5 px-4 py-2">Actions</th>
+                                        <th class="border w-1/8 px-4 py-2">ID</th>
+                                        <th class="border w-1/6 px-4 py-2">Content</th>
+                                        <th class="border w-1/4 px-4 py-2">Title</th>
+                                        <th class="border w-1/6 px-4 py-2">Image</th>
+                                        <th class="border w-1/7 px-4 py-2">User</th>
+                                        <th class="border w-1/7 px-4 py-2">isActive</th>
+                                        <th class="border w-1/7 px-4 py-2">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var="category" items="${categories}">
+                                    <c:forEach var="blog" items="${blogs}">
                                         <tr>
-                                            <td class="border px-4 py-2"><c:out value="${category.getId()}"/></td>
-                                            <td class="border px-4 py-2"><c:out value="${category.getName()}"/></td>
-                                            <td class="border px-4 py-2"><c:out value="${category.getDescription()}"/></td>
-                                            <td class="border px-4 py-2"><c:out value="${category.isActive()}"/></td>
-<%--                                            <td class="border px-4 py-2">--%>
-<%--                                                <i class="fas fa-check text-green-500 mx-2"></i>--%>
-<%--                                                </td>--%>
+                                            <td class="border px-4 py-2"><c:out value="${blog.getId()}"/></td>
+                                            <td class="border px-4 py-2"><c:out value="${blog.getContent()}"/></td>
+                                            <td class="border px-4 py-2"><c:out value="${blog.getTitle()}"/></td>
+                                            <td class="border px-4 py-2"><c:out value="${blog.getImageURL()}"/></td>
+<%--                                            <td class="border px-4 py-2"><c:out value="${blog.getCreateTime()}"/></td>--%>
+<%--                                            <td class="border px-4 py-2"><c:out value="${blog.getUpdateTime()}"/></td>--%>
+                                            <td class="border px-4 py-2"><c:out value="${blog.getUserID().getUsername()}"/></td>
+                                            <td class="border px-4 py-2"><c:out value="${blog.isActive()}"/></td>
+                                                <%--                                            <td class="border px-4 py-2">--%>
+                                                <%--                                                <i class="fas fa-check text-green-500 mx-2"></i>--%>
+                                                <%--                                                </td>--%>
                                             <td class="border px-4 py-2">
-                                                <a href="<c:url value="/categories?action=edit&id=${category.id}"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-white">
+                                                <a href="<c:url value="/blogs?action=edit&id=${blog.id}"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-white">
                                                     <i class="fas fa-edit"></i></a>
-                                                <a href="<c:url value="/categories?action=delete&id=${category.id}"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-red-500">
+                                                <a href="<c:url value="/blogs?action=delete&id=${blog.id}"/>" class="bg-teal-300 cursor-pointer rounded p-1 mx-1 text-red-500">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>

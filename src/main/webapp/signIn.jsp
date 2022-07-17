@@ -22,7 +22,7 @@
 
 
 <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('images/bg_1.jpg');"></div>
+    <div class="bg order-1 order-md-2" style="background-image: url('backend/images/bg_1.jpg');"></div>
     <div class="contents order-2 order-md-1">
 
         <div class="container">
@@ -30,37 +30,37 @@
                 <div class="col-md-7">
                     <h3>SignIn to <strong>Blogs</strong></h3>
                     <p class="mb-4">Create a account</p>
-                    <form action="#" method="post">
+                    <form action="/users?action=signIn" method="post">
                         <div class="form-group" >
                             <label for="username">User name</label>
-                            <input type="text" class="form-control" placeholder="Username" id="username">
+                            <input type="text" class="form-control" placeholder="Username" name="userName" id="username">
                         </div>
 
                         <div class="form-group ">
                             <label for="firstname">First name</label>
-                            <input type="text" class="form-control" placeholder="First Name" id="firstname">
+                            <input type="text" class="form-control" placeholder="First Name" name="firstName" id="firstname">
                         </div>
 
                         <div class="form-group" >
                             <label for="lastname">Last name</label>
-                            <input type="text" class="form-control" placeholder="Last Name" id="lastname">
+                            <input type="text" class="form-control" placeholder="Last Name" name="lastName" id="lastname">
                         </div>
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" placeholder="Password" id="password">
+                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="text" class="form-control" placeholder="your-email@gamil.com" id="email">
+                            <input type="text" class="form-control" placeholder="your-email@gamil.com" name="email" id="email">
                         </div>
                         <div class="form-group">
                             <label for="phoneNumber">Phone number</label>
-                            <input type="text" class="form-control" placeholder="Phone number" id="phoneNumber">
+                            <input type="text" class="form-control" placeholder="Phone number" name="phoneNumber" id="phoneNumber">
                         </div>
                         <div class="form-group">
                             <label for="address">Address</label>
-                            <input type="text" class="form-control" placeholder="Address" id="address">
+                            <input type="text" class="form-control" placeholder="Address" name="address" id="address">
                         </div>
 
                         <div class="d-flex mb-5 align-items-center">
